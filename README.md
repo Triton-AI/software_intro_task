@@ -26,7 +26,7 @@ The official [ROS Galactic documentation](https://docs.ros.org/en/galactic/index
 Having doubts on a specific package? Use [ROS Wiki](http://wiki.ros.org/) to find it out! Documentations usually have a link to the source repo.
 
 ### [ROS2 Tutorials by The Construct](https://youtube.com/playlist?list=PLK0b4e05LnzYNBzqXNm9vFD9YXWp6honJ)
-Publicly availble ROS2 tutorials on Youtube by Robot Ignite Academy.
+Publicly available ROS2 tutorials on Youtube by Robot Ignite Academy.
 
 Recommended only if you want to see a step-by-step commentary on what's already in [ROS Galactic documentation](https://docs.ros.org/en/galactic/index.html).
 
@@ -51,7 +51,7 @@ This package should contain the following components:
 
 We want our joystick mapping to be fully customizable, so the param file must include the indices for steering, throttle and braking axes,  and emergency stop button.
 
-The param file must also include the proper configuration for the joystick node, if any. See [what's configuable](https://github.com/ros-drivers/joystick_drivers/tree/ros2/joy#parameters).
+The param file must also include the proper configuration for the joystick node, if any. See [what's configurable](https://github.com/ros-drivers/joystick_drivers/tree/ros2/joy#parameters).
 
 ### The Launch Script
 
@@ -77,7 +77,7 @@ The work logic of the node:
 - Initialize: find the steering, throttle and braking axes, and estop button index from the param file;
 - Receive a joystick message;
 - Read the steering, throttle and braking axis, as well as estop button state;
-- Send the appropriate values on the output topic to LGSVL;
+- Send the appropriate values on the output topic;
 - If the ESTOP button is pressed for once, overwrite all control signal and set the braking to max.
 - Press ESTOP again to resume normal control.
 - ESTOP can also be triggered by `/estop` service.
