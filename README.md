@@ -113,13 +113,33 @@ The message should contain a `header`, 1 double field called `throttle`, 1 doubl
 4. Plug in your joystick and execute `ros2 launch joy joy-launch.py` to launch the joystick node individually. Execute `ros2 topic echo /joy` to make sense of the joystick message.
 
 ## Complete the message Package
-2. Properly configure `CMakeLists.txt` and `package.xml`.
-3. Write your custom ESTOP service.
-4. Write your custom VehicleControlData message
-5. Build and use `ros2 interface show teleop_msgs/srv/EmergencyStop` and `ros2 interface show teleop_msgs/msg/VehicleControlData` to confirm.
-
+1. Properly configure `CMakeLists.txt` and `package.xml`.
+2. Write your custom ESTOP service.
+3. Write your custom VehicleControlData message
+4. Build and use `ros2 interface show teleop_msgs/srv/EmergencyStop` and `ros2 interface show teleop_msgs/msg/VehicleControlData` to confirm.
+Racer repository
 ## Complete the Node Package
 1. Properly configure `CMakeLists.txt`/`setup.py` and `package.xml` with dependencies
 2. Think about the publishers, subscribers and service needed.
 3.  Write the node
 4. Build. Execute `ros2 topic echo /output_teleop` to verify your node's output.
+
+# Submission Instructions
+
+1. Make a fork of this repository
+2. Complete the assignment
+3. Make a ros2 bag
+4. Make a video recording show the following
+   1. Actions
+      1. Accelerating
+      2. Braking
+      3. Steering
+      4. Using the joystick to turn on and turn off estop
+      5. Calling the service to turn on and turn off estop
+   2. The following terminals open
+      1. Terminal launching your node
+      2. Terminal echoing the raw joy topic
+      3. Terminal echoing the output teleop topic
+      4. Terminal calling the service
+5. Submit a PR to our repo with the ROS2 bag link (from Google Drive), Video and any issues you faced that you think we can change in our repository
+6. Have fun!
