@@ -1,5 +1,5 @@
 # Overview
-This is a simple but comprehensive task to prove that you have every ROS2 knowledge needed to move onward in Triton AI. Completing this and you will be qualified to work on projects
+This is a simple but comprehensive task to prove that you have the ROS2 knowledge needed to move onward in Triton AI. Complete this and you will be qualified to work on projects
 
 To skip this qualification task: petition to be approved by @FrostXue or @sisaha9 on a case-by-case basis, usually given to team members specialized in hardware or high-level algorithm, or have proven record of ROS2 work.
 
@@ -12,7 +12,7 @@ To skip this qualification task: petition to be approved by @FrostXue or @sisaha
 * Write a custom ROS2 node, message, and service for a simple but essential functionary,
 * Use productive tools that brings you up to speed in ROS2,
 * Advised to use C++, but free to use Python, and
-* Have a chance of seeing your code becoming part of the Triton AI Racer repository.
+* Have a chance of seeing your code becoming part of the Triton AI projects.
 
 ## Resources
 ### [ROS Galactic Documentation](https://docs.ros.org/en/galactic/index.html)
