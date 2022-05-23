@@ -1,0 +1,15 @@
+// generated from rosidl_adapter/resource/srv.idl.em
+// with input from teleop_msgs/srv/EmergencyStop.srv
+// generated code does not contain a copyright notice
+
+
+module teleop_msgs {
+  module srv {
+    struct EmergencyStop_Request {
+      boolean set_estop;
+    };
+    struct EmergencyStop_Response {
+      boolean estop_state;
+    };
+  };
+};

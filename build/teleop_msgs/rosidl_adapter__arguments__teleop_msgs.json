@@ -1,0 +1,7 @@
+{
+  "package_name": "teleop_msgs",
+  "non_idl_tuples": [
+    "/home/chengjing/Desktop/software_intro_task/src/teleop_msgs:msg/VehicleControlData.msg",
+    "/home/chengjing/Desktop/software_intro_task/src/teleop_msgs:srv/EmergencyStop.srv"
+  ]
+}
