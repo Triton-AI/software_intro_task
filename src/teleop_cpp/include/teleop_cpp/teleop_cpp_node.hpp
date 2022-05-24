@@ -23,6 +23,14 @@
 
 #include <rclcpp/rclcpp.hpp>
 
+#include <teleop_msgs/msg/vehicle_control_data.hpp>
+
+#include <sensor_msgs/msg/joy.hpp>
+
+#include <chrono>
+
+#include <teleop_msgs/srv/emergency_stop.hpp>
+
 namespace triton_ai
 {
 namespace teleop_cpp
@@ -40,9 +48,23 @@ public:
   /// \brief print hello
   /// return 0 if successful.
   int32_t print_hello() const;
+  void emergency_stop(const std::shared_ptr<teleop_msgs::srv::EmergencyStop_Request> request,
+                      std::shared_ptr<teleop_msgs::srv::EmergencyStop_Response> response);
 
 private:
   bool verbose;  ///< whether to use verbose output or not.
+  // axis index
+  int throttle_ax;
+  int steering_ax;
+  int braking_ax;
+  int estop_bt;
+  
+  //values
+  rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr subscription_;
+  rclcpp::Publisher<teleop_msgs::msg::VehicleControlData>::SharedPtr publisher_;
+  rclcpp::TimerBase::SharedPtr timer_;
+  void topic_callback(const sensor_msgs::msg::Joy::SharedPtr msg);
+
 };
 }  // namespace teleop_cpp
 }  // namespace triton_ai

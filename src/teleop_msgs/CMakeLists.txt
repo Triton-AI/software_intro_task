@@ -33,6 +33,7 @@ endif()
 # require that dependencies from package.xml be available
 find_package(ament_cmake_auto REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
+find_package(std_msgs REQUIRED)
 
 
 
@@ -45,7 +46,7 @@ ament_auto_find_build_dependencies(REQUIRED
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/VehicleControlData.msg"
   "srv/EmergencyStop.srv"
-  DEPENDENCIES
+  DEPENDENCIES std_msgs
 )
 
 
