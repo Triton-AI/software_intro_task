@@ -10,6 +10,6 @@ joy_node:
     device_id: 0
     device_name: "Generic X-Box pad"
     deadzone: 0.05
-    autorepeat_rate: 20.0
+    autorepeat_rate: 0.0
     sticky_buttons: true
     coalesce_interval_ms: 1

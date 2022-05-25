@@ -73,8 +73,25 @@ void TeleopCppNode::topic_callback(const sensor_msgs::msg::Joy::SharedPtr msg){
 
 void TeleopCppNode::emergency_stop(const std::shared_ptr<teleop_msgs::srv::EmergencyStop::Request> request,
 std::shared_ptr<teleop_msgs::srv::EmergencyStop::Response> response){
+  if (request->set_estop){
+  auto message = teleop_msgs::msg::VehicleControlData();
+  message.brake = 2.0;  // break range from 0[1] to 2[-1]
+  message.steering = 0.0;
+  message.throttle = 0.0;
+  message.estop = true;
+  publisher_->publish(message);
+  }
+  else{
+  auto message = teleop_msgs::msg::VehicleControlData();
+  message.brake = 0.0;
+  message.steering = 0.0;
+  message.throttle = 0.0;
+  message.estop = false;
+  publisher_->publish(message);
+
+  }
+  response->estop_state = request->set_estop;
   ESTOP = request->set_estop;
-  response->estop_state = ESTOP;
 }
 
 // int main(int argc, char* argv[]){
