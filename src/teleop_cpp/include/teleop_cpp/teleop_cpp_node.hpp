@@ -58,8 +58,14 @@ private:
   int steering_ax;
   int braking_ax;
   int estop_bt;
+  // values:
+  double throttle;
+  double steering;
+  double brake;
+  bool ESTOP;
   
   //values
+  rclcpp::Service<teleop_msgs::srv::EmergencyStop>::SharedPtr estop;
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr subscription_;
   rclcpp::Publisher<teleop_msgs::msg::VehicleControlData>::SharedPtr publisher_;
   rclcpp::TimerBase::SharedPtr timer_;

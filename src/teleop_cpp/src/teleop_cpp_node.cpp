@@ -40,51 +40,51 @@ TeleopCppNode::TeleopCppNode(const rclcpp::NodeOptions & options)
   braking_ax = this->get_parameter("braking_axis").as_int();
   estop_bt = this->get_parameter("estop_button").as_int();
 
+
   // Joy Stick control Setting 
   // I don't have to worry?
 
-  subscription_ = this->create_subscription<sensor_msgs::msg::Joy>("/joy", 10, std::bind(&TeleopCppNode::topic_callback, this, _1));
+  subscription_ = this->create_subscription<sensor_msgs::msg::Joy>("/input_joy", 10, std::bind(&TeleopCppNode::topic_callback, this, _1));
   publisher_ = this->create_publisher<teleop_msgs::msg::VehicleControlData>("/output_teleop",10);
+  estop = this->create_service<teleop_msgs::srv::EmergencyStop>("/estop",std::bind(&TeleopCppNode::emergency_stop,this,std::placeholders::_1, std::placeholders::_2));
 }
 
 
 void TeleopCppNode::topic_callback(const sensor_msgs::msg::Joy::SharedPtr msg){
   auto message = teleop_msgs::msg::VehicleControlData();
-  message.estop = msg->buttons[estop_bt];
-  if (message.estop){
-    message.brake = 2.0;   //override
-    message.throttle = 0.0;
-    message.steering= 0.0;
+  message.estop = msg->buttons[estop_bt] || ESTOP;
+  if (message.estop || ESTOP){
+    brake = 2.0;   //override
+    throttle = 0.0;
+    steering= 0.0;
   }
   else{
-    message.throttle = (msg->axes[throttle_ax])* -1 + 1; // throttle range from 0[1] to 2[-1]
-    message.brake = (msg->axes[braking_ax]) * -1 + 1;  // break range from 0[1] to 2[-1]
-    message.steering = msg->axes[steering_ax];
+    throttle = (msg->axes[throttle_ax])* -1 + 1; // throttle range from 0[1] to 2[-1]
+    brake = (msg->axes[braking_ax]) * -1 + 1;  // break range from 0[1] to 2[-1]
+    steering = msg->axes[steering_ax];
   }
+  message.throttle = throttle; // throttle range from 0[1] to 2[-1]
+  message.brake = brake;  // break range from 0[1] to 2[-1]
+  message.steering = steering;
+  message.header = msg->header;
   publisher_->publish(message);
 }
 
 
-// void emergency_stop(const std::shared_ptr<teleop_msgs::srv::EmergencyStop_Request> request,
-// std::shared_ptr<teleop_msgs::srv::EmergencyStop_Response> response){
-//   response->estop_state =  request->set_estop;
-//   if (response->estop_state){
-//     auto joy_pub = create_publisher<sensor_msgs::msg::Joy>("/input_joy",10);
-//     auto message = sensor_msgs::msg::Joy();
-//     message.buttons[estop_bt] = 1;
-//     joy_pub->publish(message);
-//   }
-// }
-
-int main(int argc, char* argv[]){
-  rclcpp::init(argc, argv);
-  rclcpp::NodeOptions options;
-  auto node = std::make_shared<TeleopCppNode>(options);
-  //rclcpp::Service<teleop_msgs::srv::EmergencyStop>::SharedPtr service = node->create_service<teleop_msgs::srv::EmergencyStop>("emergency_stop",&TeleopCppNode::emergency_stop);
-  rclcpp::spin(node);
-  rclcpp::shutdown();
-  return 0;
+void TeleopCppNode::emergency_stop(const std::shared_ptr<teleop_msgs::srv::EmergencyStop::Request> request,
+std::shared_ptr<teleop_msgs::srv::EmergencyStop::Response> response){
+  ESTOP = request->set_estop;
+  response->estop_state = ESTOP;
 }
+
+// int main(int argc, char* argv[]){
+//   rclcpp::init(argc, argv);
+//   rclcpp::NodeOptions options;
+//   auto node = std::make_shared<TeleopCppNode>(options);
+//   rclcpp::spin(node);
+//   rclcpp::shutdown();
+//   return 0;
+// }
 
 
 }  // namespace teleop_cpp

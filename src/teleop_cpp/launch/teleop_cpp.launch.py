@@ -29,4 +29,13 @@ def generate_launch_description():
         parameters=[teleop_cpp_dir]
     )
 
-    return LaunchDescription([teleop_cpp_node])
+    joy_stick_node = Node(
+        package='joy',
+        executable='joy_node', # watch out for the name lol
+        parameters=[teleop_cpp_dir],
+        remappings=[('/joy','/input_joy')]
+    )
+
+    return LaunchDescription([teleop_cpp_node,joy_stick_node])
+
+
