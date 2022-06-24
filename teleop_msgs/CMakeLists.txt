@@ -42,6 +42,14 @@ ament_auto_find_build_dependencies(REQUIRED
 #   DEPENDENCIES
 # )
 
+find_package(rosidl_default_generators REQUIRED)
+
+rosidl_generate_interfaces(${PROJECT_NAME}
+  "msg/VehicleControlData.msg"
+  "srv/EmergencyStop.srv"
+  DEPENDENCIES builtin_interfaces std_msgs
+)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()

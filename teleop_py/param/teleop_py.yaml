@@ -1,3 +1,12 @@
 /**:
   ros__parameters:
-    use_sim_time: True
+    throttle_index: 5
+    steering_index: 0
+    brake_index: 2
+    estop_index: 5
+    device_id: 0
+    device_name: ""
+    deadzone: 0.05
+    autorepeat_rate: 20.0
+    sticky_buttons: False
+    coalesce_interval_ms: 1
