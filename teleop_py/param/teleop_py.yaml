@@ -1,3 +1,7 @@
-/**:
+teleop_py_node:
   ros__parameters:
+    throttle: 5
+    steering: 0
+    braking: 2
+    estop: 5
     use_sim_time: True
