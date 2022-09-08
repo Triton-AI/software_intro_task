@@ -36,26 +36,43 @@ class TeleopPy(Node):
 #    def print_hello(self):
 #        teleop_py.print_hello()
         self.srv = self.create_service(EmergencyStop, "/estop", self.emergency_stop_callback)
-        self.estop_call = False
+        self.estop = False
+        self.change = False
+        self.converter = {1: True, 0: False}
+
+    def flip_converter(self):
+        self.converter[1] = bool(1 - int(self.converter[1]))
+        self.converter[0] = bool(1 - int(self.converter[0]))
 
     def listener_callback(self, msg):
         throttle = msg.axes[self.get_parameter('throttle').value]
         steering = msg.axes[self.get_parameter('steering').value]
         brake = msg.axes[self.get_parameter('braking').value]
-        estop = bool(msg.buttons[self.get_parameter('estop').value])
+        estop = self.converter[msg.buttons[self.get_parameter('estop').value]]
         vcd = VehicleControlData()
-        if estop or self.estop_call:
+        if estop != self.estop:
+            if self.change:
+                estop = self.estop
+                self.flip_converter()
+            else:
+                self.estop = estop
+        self.change = False
+        if estop:
             vcd.brake = -1.0
         else:
             vcd.brake = brake
             vcd.throttle = throttle
             vcd.steering = steering
-        vcd.estop = estop or self.estop_call
+        vcd.estop = estop
         self.publisher_.publish(vcd)
 
     def emergency_stop_callback(self, request, response):
         response.estop_state = request.set_estop
-        self.estop_call = request.set_estop
+        if request.set_estop != self.estop:
+            self.change = True
+        else:
+            self.change = False
+        self.estop = request.set_estop
         return response
 
 def main(args=None):
