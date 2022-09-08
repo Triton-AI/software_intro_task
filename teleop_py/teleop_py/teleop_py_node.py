@@ -12,20 +12,75 @@
 # See the License for the specific language governing permissions and
 # limitations under the License
 
-import teleop_py
-
+import rclpy
 from rclpy.node import Node
+from sensor_msgs.msg import Joy
+from teleop_msgs.msg import VehicleControlData
+from teleop_msgs.srv import EmergencyStop
 
 class TeleopPy(Node):
     def __init__(self):
         super().__init__("teleop_py_node")
-        self.print_hello()
-    
-    def print_hello(self):
-        teleop_py.print_hello()
+        self.declare_parameters(
+            namespace = '',
+            parameters=[
+                ('steering', 0),
+                ('throttle', 0),
+                ('braking', 0),
+                ('estop', 0)
+            ]
+        )
+        self.publisher_ = self.create_publisher(VehicleControlData, "/output_teleop", 10)
+#        self.print_hello()
+        self.subscription = self.create_subscription(Joy, '/joy', self.listener_callback, 10)
+#    def print_hello(self):
+#        teleop_py.print_hello()
+        self.srv = self.create_service(EmergencyStop, "/estop", self.emergency_stop_callback)
+        self.estop = False
+        self.change = False
+        self.converter = {1: True, 0: False}
+
+    def flip_converter(self):
+        self.converter[1] = bool(1 - int(self.converter[1]))
+        self.converter[0] = bool(1 - int(self.converter[0]))
+
+    def listener_callback(self, msg):
+        throttle = msg.axes[self.get_parameter('throttle').value]
+        steering = msg.axes[self.get_parameter('steering').value]
+        brake = msg.axes[self.get_parameter('braking').value]
+        estop = self.converter[msg.buttons[self.get_parameter('estop').value]]
+        vcd = VehicleControlData()
+        if estop != self.estop:
+            if self.change:
+                estop = self.estop
+                self.flip_converter()
+            else:
+                self.estop = estop
+        self.change = False
+        if estop:
+            vcd.brake = -1.0
+        else:
+            vcd.brake = brake
+            vcd.throttle = throttle
+            vcd.steering = steering
+        vcd.estop = estop
+        self.publisher_.publish(vcd)
+
+    def emergency_stop_callback(self, request, response):
+        response.estop_state = request.set_estop
+        if request.set_estop != self.estop:
+            self.change = True
+        else:
+            self.change = False
+        self.estop = request.set_estop
+        return response
 
 def main(args=None):
+    rclpy.init(args=args)
     teleop_py = TeleopPy()
+    rclpy.spin(teleop_py)
+    teleop.destroy_node()
+    rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
