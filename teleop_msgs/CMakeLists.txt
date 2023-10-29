@@ -38,9 +38,9 @@ ament_auto_find_build_dependencies(REQUIRED
 )
 
 # Uncomment below
-# rosidl_generate_interfaces(${PROJECT_NAME}
-#   DEPENDENCIES
-# )
+rosidl_generate_interfaces(${PROJECT_NAME}
+  "msg/VehicleControlData.msg"
+)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
