@@ -40,6 +40,7 @@ ament_auto_find_build_dependencies(REQUIRED
 # Uncomment below
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/VehicleControlData.msg"
+  "srv/EStop.srv"
 )
 
 if(BUILD_TESTING)

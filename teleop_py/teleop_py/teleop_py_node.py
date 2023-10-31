@@ -31,22 +31,21 @@ class TeleopPy(Node):
             VehicleControlData, 
             'output_teleop',
             10)
-        self.print_hello()
+        timer_period = 0.5
+        self.timer = self.create_timer(timer_period, timer_callback)
     
     def listener_callback(self, msg):
         self.get_logger().info('I heard "%s"' % msg.axes)
         self.get_logger().info('I heard "%s"' % msg.buttons)
 
-    def publisher_callback(self):
+    def timer_callback(self):
+        # Setting up the messages here
         msg = VehicleControlData()
-        msg.brakes = 1.2
         msg.throttle = 1.2
+        msg.steering = 1.2
+        msg.brakes = 1.2
+        msg.estop = True
 
-float64 throttle
-float64 steering
-float64 brakes
-bool estop
-        self.publisher_.publish(msg)
         self.publisher_.publish(msg)
         self.get_logger().info('Publishing: "%s"' % msg.data)
 
